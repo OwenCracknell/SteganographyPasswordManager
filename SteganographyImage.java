@@ -5,7 +5,7 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-public class StenographyImage extends java.awt.image.BufferedImage{
+public class SteganographyImage extends java.awt.image.BufferedImage{
     //Stenography functions only work for lossless files with support for transparency
 
     private Pixel[][] pixelArray;
@@ -13,8 +13,8 @@ public class StenographyImage extends java.awt.image.BufferedImage{
     private String fileType;
 
     //contructor
-    public StenographyImage (BufferedImage image, String name, String fileType){
-        //contructor for StenographyImage, uses filePath to image as a String as parameter
+    public SteganographyImage (BufferedImage image, String name, String fileType){
+        //contructor for SteganographyImage, uses filePath to image as a String as parameter
         //use ImageIO.read(new File(filePath)); as it returns a buffered image and is the easiest way to load in image from filepath
         super(image.getWidth(), image.getHeight(), image.getType());
         setName(name);

@@ -5,7 +5,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 public class ImageLibrary{
-    public StenographyImage[] library;
+    public SteganographyImage[] library;
     private String[] files;
     private String filePath; 
     public int numOfImages;
@@ -14,28 +14,28 @@ public class ImageLibrary{
 
     public ImageLibrary (String filePath){
         this.filePath = filePath;
-        library = new StenographyImage[0]; // init StenographyImage array, adding to it in loadImages()
+        library = new SteganographyImage[0]; // init SteganographyImage array, adding to it in loadImages()
         files = imgsInFolder(filePath); // get imgs in filePath
         numOfImages = library.length;
         loadImages(files);
     }
 
     public void loadImages (String[] files){
-        // creates StenographyImage objs from files in String[] files array and loads them into library array 
+        // creates SteganographyImage objs from files in String[] files array and loads them into library array 
         for(int index = 0; index < files.length; index++){
             try {
                 BufferedImage newImage = ImageIO.read(new File(filePath+files[index]));
-                StenographyImage newStegoImage = null;
+                SteganographyImage newStegoImage = null;
                 if(files[index].endsWith("png")){
-                    newStegoImage = new StenographyImage(newImage, files[index].toLowerCase().replaceFirst(".png",""), "png");
+                    newStegoImage = new SteganographyImage(newImage, files[index].toLowerCase().replaceFirst(".png",""), "png");
 
                 }
                 else if (files[index].toLowerCase().endsWith("jpg")){
-                    newStegoImage = new StenographyImage(newImage, files[index].toLowerCase().replaceFirst(".jpg",""), "jpg");
+                    newStegoImage = new SteganographyImage(newImage, files[index].toLowerCase().replaceFirst(".jpg",""), "jpg");
                 }
 
                 if(newStegoImage != null && newStegoImage.getName() != null && newStegoImage.getFileType() != null){
-                    library = (StenographyImage[]) addToImageArray(library, newStegoImage);
+                    library = (SteganographyImage[]) addToImageArray(library, newStegoImage);
                     numOfImages++;
                 }
                 else{
@@ -154,9 +154,9 @@ public class ImageLibrary{
         return newArray;
     }
 
-    public static StenographyImage[] addToImageArray (StenographyImage[] array, StenographyImage element){
+    public static SteganographyImage[] addToImageArray (SteganographyImage[] array, SteganographyImage element){
         // returns new String array with same elements in array parameter with element parameter appended on end
-        StenographyImage[] newArray = new StenographyImage[array.length+1];
+        SteganographyImage[] newArray = new SteganographyImage[array.length+1];
         for (int index = 0; index < array.length; index++){
             newArray[index] = array[index];
         }
@@ -164,9 +164,9 @@ public class ImageLibrary{
         return newArray;
     }
 
-    private static StenographyImage[] nameSort(StenographyImage[] imageArray, int sortedIndex) {
+    private static SteganographyImage[] nameSort(SteganographyImage[] imageArray, int sortedIndex) {
         // sorts imageArray param using the insertionSort algorithm applied onto the objs name var
-        //returns sorted StenographyImage array, from lowest letter to highest (a---->z)
+        //returns sorted SteganographyImage array, from lowest letter to highest (a---->z)
         // sortedIndex should be 0 on first pass as we assume that index at 0 is sorted already
         if(sortedIndex == imageArray.length-1){
             return imageArray;
@@ -175,7 +175,7 @@ public class ImageLibrary{
             String unsortedElement = imageArray[sortedIndex+1].getName();
             for(int index = sortedIndex; index >= 0; index--){
                 if(unsortedElement.compareTo(imageArray[index].getName()) < 0){
-                    StenographyImage temp = imageArray[index];
+                    SteganographyImage temp = imageArray[index];
                     imageArray[index] = imageArray[index+1];
                     imageArray[index+1] = temp;
                 }
@@ -184,9 +184,9 @@ public class ImageLibrary{
         }
     }
 
-    private static StenographyImage[] fileTypeSort(StenographyImage[] imageArray, int sortedIndex){
+    private static SteganographyImage[] fileTypeSort(SteganographyImage[] imageArray, int sortedIndex){
         // sorts imageArray param using the insertionSort algorithm applied onto the objs fileType var
-        //returns sorted StenographyImage array, from lowest letter to highest (a---->z)
+        //returns sorted SteganographyImage array, from lowest letter to highest (a---->z)
         // sortedIndex should be 0 on first pass as we assume that index at 0 is sorted already
         if(sortedIndex == imageArray.length-1){
             return imageArray;
@@ -195,7 +195,7 @@ public class ImageLibrary{
             String unsortedElement = imageArray[sortedIndex+1].getFileType();
             for(int index = sortedIndex; index >= 0; index--){
                 if(unsortedElement.compareTo(imageArray[index].getFileType()) < 0){
-                    StenographyImage temp = imageArray[index];
+                    SteganographyImage temp = imageArray[index];
                     imageArray[index] = imageArray[index+1];
                     imageArray[index+1] = temp;
                 }
