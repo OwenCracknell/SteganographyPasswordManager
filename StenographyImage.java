@@ -76,7 +76,7 @@ public class StenographyImage extends java.awt.image.BufferedImage{
 }
 
     public void saveImage(String filePath){
-        File newImgFile = new File(name+"."+fileType);
+        File newImgFile = new File(filePath+name+"."+fileType);
         try {
             ImageIO.write(this, fileType, newImgFile);
         } 
@@ -165,6 +165,7 @@ public class StenographyImage extends java.awt.image.BufferedImage{
     public void setFileType(String fileType){
         if(fileType.isBlank() || !fileType.contains("png")){
             System.err.println("cannot create an image with no file type or unsupported file type");
+            this.fileType = fileType;
         }
         else{
             this.fileType = fileType;
