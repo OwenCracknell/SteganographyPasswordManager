@@ -1,35 +1,55 @@
 import java.io.*;
-
-import javax.swing.JOptionPane;
+import java.util.Scanner;
 
 public class Main {
-    public static String confFilePath = "/home/owen/javagr12/FEU/StenoPassMan.conf";
+    public static String confFilePath = "SteganoPassMan.conf"; // looks for config file where ever Main.java is run
     public static GUI gui;
     
     public static void writeToConfigFile(String[] lines) throws IOException{
+        //writes lines in String array lines to config file
         BufferedWriter writer = new BufferedWriter(new FileWriter(confFilePath));
         for(int index = 0; index < lines.length; index++){
             writer.write(lines[index]);
             writer.newLine();
         }
-        writer.close();
+        writer.close(); // save image
     }
 
-    private static String[] readConfigFile() throws IOException{
-        BufferedReader reader = new BufferedReader(new FileReader(confFilePath));
-        
-        String[] fileContent = new String[4];
-
-        for(int index = 0; index < fileContent.length; index++){
-            fileContent[index] = reader.readLine();
+    public static String[] readConfigFile() throws IOException{
+        //returns String array with content in config file
+        //sort of recursive
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader(confFilePath));
+            String[] fileContent = new String[4];
+            for(int index = 0; index < fileContent.length; index++){
+                fileContent[index] = reader.readLine();
+            }
+            reader.close();
+            return fileContent;
+        } 
+        catch (IOException e) { //config file does not exist
+            createDefaultConfigFile();
+            return readConfigFile();
         }
+    }
+    public static void createDefaultConfigFile() throws IOException{
+        //create deafult config file, also asks user where they would like password manager to save passwords
+        String[] options = new String[4];
+        options[0] = "name"; //sort type
+        options[1] = "all"; // show Filetype
+        options[2] = "light"; //apperence
         
-        reader.close();
-        return fileContent;
+        Scanner input = new Scanner(System.in);
+        System.out.println("where would you passwords to be saved");
+        options[3] = input.next();
+        input.close();
+        writeToConfigFile(options);
     }
 
-    private static void loadOptions (String[] options){
-
+    public static void loadOptions (String[] options){
+        //applys options in options String array parameter to gui
+        
+        //sort type
         if(options[0].equals("name")){
             gui.lib.sort("name");
         }
@@ -37,6 +57,7 @@ public class Main {
             gui.lib.sort("fileType");
         }
 
+        //show file type
         if(options[1].equals("all")){
             gui.imgShowStartIndex = 0;
             gui.imgShowEndIndex = gui.lib.numOfImages-1;
@@ -46,13 +67,14 @@ public class Main {
             gui.imgShowEndIndex = gui.lib.findLastIndexOfFileType("png");
         }
 
+        //apperence mode
         if (options[2].equals("dark")){
             gui.changeToDarkMode();
         }
         else if (options[2].equals("light")){
             gui.changeToLightMode();
         }
-        gui.displayLibraryImages();
+        gui.displayLibraryImages(); //applys apperence changes
     }
 
     public static void main (String[] args) throws IOException{

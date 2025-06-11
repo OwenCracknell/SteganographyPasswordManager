@@ -11,7 +11,6 @@ public class ImageLibrary{
     public int numOfImages;
 
     //constructors
-
     public ImageLibrary (String filePath){
         this.filePath = filePath;
         library = new SteganographyImage[0]; // init SteganographyImage array, adding to it in loadImages()
@@ -50,6 +49,8 @@ public class ImageLibrary{
     }
 
     public void sort(String sortBy){
+        //calls sort method based on sortBy string parameter
+        //needed as both nameSort and fileTypeSort needs int 0 as a parameter and i dont trust myself to remeber that in the future
         if(numOfImages >0){
             switch (sortBy.toLowerCase()) {
                 case "name":
@@ -66,19 +67,22 @@ public class ImageLibrary{
     }
 
     public int findFirstIndexOfFileType(String fileType){
+        //returns the first index of fileType within the library
         sort("fileType");
 
+        //create string array with with fileTypes from images in library
         String[] fileTypeArray = new String[numOfImages];
-
         for(int index = 0; index < numOfImages; index++){
             fileTypeArray[index] = library[index].getFileType();
         }
-        int confirmedIndex = binarySearch(fileTypeArray, fileType, 0, numOfImages);
+
+        int confirmedIndex = binarySearch(fileTypeArray, fileType, 0, numOfImages); //search for any string in array that matches filetype
         return findFirstInStringArrayBlock(fileTypeArray, confirmedIndex);
 
     }
 
     private static int findFirstInStringArrayBlock(String[] array, int confirmedIndex){
+        //returns least most index that matches string at confirmedIndex by recursivly checking adjacent values
         if(confirmedIndex ==0){
             return confirmedIndex;
         }
@@ -92,22 +96,20 @@ public class ImageLibrary{
 
 
     public int findLastIndexOfFileType(String fileType){
+        //returns the last index of fileType within the library
         sort("fileType");
 
+        //create string array with with fileTypes from images in library
         String[] fileTypeArray = new String[numOfImages];
-
         for(int index = 0; index < numOfImages; index++){
             fileTypeArray[index] = library[index].getFileType();
         }
-        int confirmedIndex = binarySearch(fileTypeArray, fileType, 0, numOfImages);
+        int confirmedIndex = binarySearch(fileTypeArray, fileType, 0, numOfImages); //search for any string in array that matches filetype
         return findLastInStringArrayBlock(fileTypeArray, confirmedIndex);
     }
 
-    public String getFilePath(){
-        return filePath;
-    }
-
     private static int findLastInStringArrayBlock(String[] array, int confirmedIndex){
+        //returns greatest index that matches string at confirmedIndex by recursivly checking adjacent values
         if(confirmedIndex == array.length-1){
             return confirmedIndex;
         }
@@ -120,6 +122,10 @@ public class ImageLibrary{
     }
 
     public int search(String searchTerm){
+        //returns index of library where the name matches or contain searchTerm String parameter
+        
+        sort("name");
+        //create array with names of files
         String[] names = new String[numOfImages];
         for(int index = 0; index < numOfImages; index++){
             names[index] = library[index].getName();
@@ -129,7 +135,7 @@ public class ImageLibrary{
 
 
     private static String[] imgsInFolder (String filePath){
-        //returns all files ending in .png within filePath parameter as a String array
+        //returns all files ending in .png or .jpg within filePath parameter as a String array
         File fileFolder = new File(filePath);
 
         String[] allFilesInFolder = new String[0];
@@ -165,7 +171,7 @@ public class ImageLibrary{
     }
 
     private static SteganographyImage[] nameSort(SteganographyImage[] imageArray, int sortedIndex) {
-        // sorts imageArray param using the insertionSort algorithm applied onto the objs name var
+        // sorts imageArray parameter using the insertionSort algorithm applied onto the objs name var
         //returns sorted SteganographyImage array, from lowest letter to highest (a---->z)
         // sortedIndex should be 0 on first pass as we assume that index at 0 is sorted already
         if(sortedIndex == imageArray.length-1){
@@ -185,7 +191,7 @@ public class ImageLibrary{
     }
 
     private static SteganographyImage[] fileTypeSort(SteganographyImage[] imageArray, int sortedIndex){
-        // sorts imageArray param using the insertionSort algorithm applied onto the objs fileType var
+        // sorts imageArray parameter using the insertionSort algorithm applied onto the objs fileType var
         //returns sorted SteganographyImage array, from lowest letter to highest (a---->z)
         // sortedIndex should be 0 on first pass as we assume that index at 0 is sorted already
         if(sortedIndex == imageArray.length-1){
@@ -205,7 +211,7 @@ public class ImageLibrary{
     }
 
     private static int binarySearch (String[] strArr, String searchTerm, int firstIndex, int lastIndex){
-        // returns index of searchTerm param in strArr param using the binarySearch algorithm
+        // returns index of searchTerm parameter in strArr param using the binarySearch algorithm (will also return index if searchTerm is within strArray element)
         // strArr param must be already sorted
         // also takes in firstIndex and lastIndex as a param in order to recursively split array
         int middleIndex = (firstIndex+lastIndex)/2;
@@ -220,8 +226,12 @@ public class ImageLibrary{
                 return binarySearch(strArr, searchTerm, middleIndex+1, lastIndex);
             }
         }
-        return -1;
+        return -1;//not found
+    }
 
+    //getters
+    public String getFilePath(){
+        return filePath;
     }
 
     public String toString() {

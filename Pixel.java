@@ -1,14 +1,15 @@
 public class Pixel {
-    public int alpha;
-    public int red;
-    public int green;
-    public int blue;
+    private int alpha;
+    private int red;
+    private int green;
+    private int blue;
 
+    //contructor
     public Pixel (int rgb){
-        this.alpha = getAlphaFromRGB(rgb);
-        this.red = getRedFromRGB(rgb);
-        this.green = getGreenFromRGB(rgb);
-        this.blue = getBlueFromRGB(rgb);
+        alpha = getAlphaFromRGB(rgb);
+        red = getRedFromRGB(rgb);
+        green = getGreenFromRGB(rgb);
+        blue = getBlueFromRGB(rgb);
     }
 
     public int getRGB(){
@@ -53,6 +54,7 @@ public class Pixel {
         }
     }
 
+    //getters
     public int getlastAlphaBit(){
         return alpha & 1;
     }
@@ -66,7 +68,7 @@ public class Pixel {
         return blue & 1;
     }
 
-
+    //class methods to seperate channel from rgb value
     private static int getAlphaFromRGB (int rgb){
         //gets alpha channel from combined rgb int parameter
         return(rgb>>24) & 255;

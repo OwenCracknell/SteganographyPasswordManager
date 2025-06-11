@@ -6,16 +6,17 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 public class SteganographyImage extends java.awt.image.BufferedImage{
-    //Stenography functions only work for lossless files with support for transparency
+    //Stenography functions only work for lossless files with support for transparency (.pngs)
 
     private Pixel[][] pixelArray;
     private String name;
     private String fileType;
 
-    //contructor
+    //constructor
     public SteganographyImage (BufferedImage image, String name, String fileType){
-        //contructor for SteganographyImage, uses filePath to image as a String as parameter
         //use ImageIO.read(new File(filePath)); as it returns a buffered image and is the easiest way to load in image from filepath
+        //String name and String fileType parameters only used for sorting within ImageLibrary
+        
         super(image.getWidth(), image.getHeight(), image.getType());
         setName(name);
         setFileType(fileType);
@@ -29,7 +30,7 @@ public class SteganographyImage extends java.awt.image.BufferedImage{
     }
     //stenography methods
     private void fillPixels(){        
-        //fills pixelArray 2d array with Pixel objects
+        //fills pixelArray 2d Pixel array with Pixel objects
         pixelArray = new Pixel[getHeight()][this.getWidth()];
         for(int y = 0; y < getHeight(); y++){
             for(int x = 0; x < this.getWidth(); x++){
@@ -50,30 +51,33 @@ public class SteganographyImage extends java.awt.image.BufferedImage{
         }
     }
     public void stringToBlueLSB(String text) {
-    // Convert text to Unicode bit array (MSB-first if you updated that method)
-    int[] bitArray = StringToUnicodeIntArray(text);
+        //edits pixels blue channels within pixelArray to store unicode bits designated by String text parameter
+        //stores as the last bit of the pixels blue channel as it has the least visual effect on the final image
+        //writes 16 0s (null char) to mark text end
 
-    int totalBitsToWrite = bitArray.length + 16; // 16 bits for null character
-    int bitIndex = 0;
 
-    for (int y = 0; y < pixelArray.length; y++) {
-        for (int x = 0; x < pixelArray[y].length; x++) {
-            if (bitIndex < bitArray.length) {
-                // Write message bits
-                pixelArray[y][x].modifyLastBlueBit(bitArray[bitIndex]);
-            } else if (bitIndex < totalBitsToWrite) {
-                // Write null terminator bits (16 zeros)
-                pixelArray[y][x].modifyLastBlueBit(0);
-            } else {
-                // Done writing
-                return;
+        // Convert text to Unicode bit array
+        int[] bitArray = StringToUnicodeIntArray(text);
+
+        int totalBitsToWrite = bitArray.length + 16; // 16 bits for null character
+        int bitIndex = 0;
+
+        for (int y = 0; y < pixelArray.length; y++) {
+            for (int x = 0; x < pixelArray[y].length; x++) {
+                if (bitIndex < bitArray.length) {
+                    // Write message bits
+                    pixelArray[y][x].modifyLastBlueBit(bitArray[bitIndex]);
+                } 
+                else if (bitIndex < totalBitsToWrite) {
+                    // Write null terminator bits (16 zeros)
+                    pixelArray[y][x].modifyLastBlueBit(0);
+                }
+
+                setRGB(x, y, pixelArray[y][x].getRGB());
+                bitIndex++;
             }
-
-            setRGB(x, y, pixelArray[y][x].getRGB());
-            bitIndex++;
         }
     }
-}
 
     public void saveImage(String filePath){
         File newImgFile = new File(filePath+name+"."+fileType);
@@ -81,11 +85,12 @@ public class SteganographyImage extends java.awt.image.BufferedImage{
             ImageIO.write(this, fileType, newImgFile);
         } 
         catch (IOException e) {
-            System.err.println("error occured when saving image");
+            System.err.println("error occured when saving image"); //the same as out.println but prints in red in terminal
         }
     }
 
     public String getTextFromBlue() {
+        // returns String with text from last bits in blue channel
         String text = "";
 
         int currentChar = 0; // int to hold binary of char we are working with
@@ -95,8 +100,8 @@ public class SteganographyImage extends java.awt.image.BufferedImage{
         int x = 0;
         int y = 0;
 
-        while (!nulCharReached && y < this.getHeight()) {
-            // check if reached pixel in line
+        while (!nulCharReached && y < this.getHeight()) { //pixels left to read and null char not reached
+            // wrap back to first pixel in next row when last pixel in col is reached
             if (x >= this.getWidth()) {
                 x = 0;
                 y++;
@@ -125,6 +130,7 @@ public class SteganographyImage extends java.awt.image.BufferedImage{
     }
 
     private static int[] StringToUnicodeIntArray (String text){
+        //returns unicode int array of String text parameter converted to bit array
         int[] unicodeArray = new int[text.length()*16]; // array to hold binary of unicode chars
         
         for(int charIndex = 0; charIndex < text.length(); charIndex++){
