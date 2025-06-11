@@ -5,6 +5,10 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 public class ImageLibrary{
+    // Name: Owen Cracknell 
+    // Date: June 11, 2025
+    // Purpose: Provides storage of SteganographyImage objects as an array along with sorting and search functionality
+
     public SteganographyImage[] library;
     private String[] files;
     private String filePath; 

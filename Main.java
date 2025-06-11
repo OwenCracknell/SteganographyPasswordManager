@@ -2,6 +2,10 @@ import java.io.*;
 import java.util.Scanner;
 
 public class Main {
+    // Name: Owen Cracknell 
+    // Date: June 11, 2025
+    // Purpose: reads config file and sets up gui for SteganographyPasswordManager
+    
     public static String confFilePath = "SteganoPassMan.conf"; // looks for config file where ever Main.java is run
     public static GUI gui;
     

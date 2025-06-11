@@ -9,6 +9,10 @@ import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class GUI implements ActionListener{
+    // Name: Owen Cracknell 
+    // Date: June 11, 2025
+    // Purpose: provide a graphical user interface for SteganographyPasswordManager
+
     //img library vars
     public ImageLibrary lib;
     public int imgShowStartIndex;

@@ -6,6 +6,9 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 public class SteganographyImage extends java.awt.image.BufferedImage{
+    // Name: Owen Cracknell 
+    // Date: June 11, 2025
+    // Purpose: provides a framework for editing images for steganography purposes
     //Stenography functions only work for lossless files with support for transparency (.pngs)
 
     private Pixel[][] pixelArray;

@@ -1,4 +1,8 @@
 public class Pixel {
+    // Name: Owen Cracknell 
+    // Date: June 11, 2025
+    // Purpose: provides a framework for editing and reading rgb information from a pixel of an image
+
     private int alpha;
     private int red;
     private int green;
